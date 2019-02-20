@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:mv="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- 配置springMVC -->
+
+    <!-- 1.扫描web相关的bean -->
+    <context:component-scan base-package="com.imooc.o2o.web"/>
+
+    <!-- 2.开启springMVC注解模式  -->
+    <mv:annotation-driven/>
+
+    <!-- 3.静态资源默认servlet处理
+        （1）加入对webapp下的静态资源的处理：js、gif.png
+        （2）允许使用"/"做整体映射
+    -->
+    <mv:resources mapping="/resources/**" location="/resources/"/>
+    <mv:default-servlet-handler/>
+
+    <!-- 4.定义视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+          p:prefix="WEB-INF/html/" p:suffix=".html"/>
+
+</beans>

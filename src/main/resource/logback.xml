@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" scanPeriod="60000" debug="false">
+    <!-- 定义常量属性，可以理解为全局变量，在其他位置通过${name}来引用得到value值 -->
+    <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n"/>
+    <property name="log.filePath" value="${catalina.base}/logs/webapps"/>
+    <property name="log.maxHistory" value="30"/>
+    <property name="log.level" value="debug"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- layout不推荐，推荐用encoder -->
+        <!--<layout class="ch.qos.logback.classic.PatternLayout">-->
+            <!--<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>-->
+        <!--</layout>-->
+
+        <!-- encoder两个功能1.将日志信息转换为字符串;
+                            2.这些日志信息输出到文件中-->
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- DEBUG -->
+    <appender name="debugAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 文件路径 -->
+        <file>${log.filePath}/debug.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 文件名称 -->
+            <fileNamePattern>${log.filePath}/debug/debug.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <!-- 文件最大保存历史数量 -->
+            <MaxHistory>${log.maxHistory}</MaxHistory>
+        </rollingPolicy>
+        <!-- 在这里的encoder既将日志信息转换为字符串，又将这些日志信息输出到文件中-->
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+        <!-- 过滤器,过滤掉非debug的信息，只记录debug的信息到日志文件中 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- INFO -->
+    <appender name="infoAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 文件路径 -->
+        <file>${log.filePath}/info.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 文件名称 -->
+            <fileNamePattern>${log.filePath}/info/info.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <!-- 文件最大保存历史数量 -->
+            <MaxHistory>${log.maxHistory}</MaxHistory>
+        </rollingPolicy>
+        <!-- 在这里的encoder既将日志信息转换为字符串，又将这些日志信息输出到文件中-->
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+        <!-- 过滤器,过滤掉非info的信息，只记录info的信息到日志文件中 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- ERROR -->
+    <appender name="errorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 文件路径 -->
+        <file>${log.filePath}/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 下面两个配置：每天生成一个日志文件，系统将最近30天的文件都压缩在以.log.gz结尾的文件中-->
+            <!-- 文件名称，这里以.log.gz结尾，系统自动压缩 -->
+            <fileNamePattern>${log.filePath}/error/error.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <!-- 文件最大保存历史数量,表示压缩文件只保存最近30天的文件，即30个文件 -->
+            <MaxHistory>${log.maxHistory}</MaxHistory>
+        </rollingPolicy>
+        <!-- 在这里的encoder既将日志信息转换为字符串，又将这些日志信息输出到文件中-->
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+        <!-- 过滤器,过滤掉非error的信息，只记录error的信息到日志文件中 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+
+    <!-- 没有配置additivity，那么默认additivity=true，表示此<logger>的打印信息向父级<root>传递 -->
+    <!-- 也就是<logger>的打印信息向<root>传递，<root>使用"STDOUT"这个<appender>按照<logger>的level属性值去打印出所有大于等于debug级别的日志 -->
+    <logger name="com.imooc.o2o" level="${log.level}" additivity="true">
+        <appender-ref ref="debugAppender"/>
+        <appender-ref ref="infoAppender"/>
+        <appender-ref ref="errorAppender"/>
+    </logger>
+
+
+    <!-- 第一点 -->
+    <!-- 没有配置additivity，那么默认additivity=true，表示此<logger>的打印信息向父级<root>传递 -->
+    <!-- 也就是<logger>的打印信息向<root>传递，<root>使用"STDOUT"这个<appender>按照<logger>的level属性值去打印出所有大于等于属性值级别的日志 -->
+    <!-- 注意这个name表示的是LoggerFactory.getLogger(XXX.class)中XXX的包路径，包路径越少越是父级，
+    我们测试代码里面是Object.class，即name="java"是name="java.lang"的父级，root是所有<logger>的父级 -->
+
+    <!-- 第二点 -->
+    <!-- <logger>中没有配置level，即继承父级的level，<logger>的父级为<root>，那么level=debug -->
+
+    <!-- 第三点 -->
+    <!-- 没有配置<appender-ref>，表示此<logger>不会打印出任何信息 -->
+
+    <!-- 第四点 -->
+    <!-- 以最子集最准，一旦最子集的additivity = false,则其所有父级(除了最父级root之外)将失去任何效果 -->
+    <!--<logger name="java"  level="trace" additivity="true">-->
+        <!--<appender-ref ref="STDOUT" />-->
+    <!--</logger>-->
+
+
+    <!--<logger name="java.lang" level="debug" additivity="false">-->
+        <!--&lt;!&ndash;<appender-ref ref="STDOUT"/>&ndash;&gt;-->
+    <!--</logger>-->
+
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>
