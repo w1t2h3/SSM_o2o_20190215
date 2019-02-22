@@ -2,9 +2,12 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.imooc.o2o.dao.AreaDao">
-    <insert id="addShop" useGeneratedKeys="true" keyColumn="shop_id" keyProperty="shopId">
-        insert into tb_shop()
+<mapper namespace="com.imooc.o2o.dao.ShopDao">
+    <insert id="insertShop" useGeneratedKeys="true" keyColumn="shop_id" keyProperty="shopId">
+        insert into tb_shop(shop_name,shop_desc,shop_img,shop_addr,phone,
+        priority,enable_status,advice,create_time,last_edit_time,area_id,owner_id,shop_category_id)
+        values(#{shopName},#{shopDesc},#{shopImg},#{shopAddr},#{phone},#{priority},#{enableStatus},
+        #{advice},#{createTime},#{lastEditTime},#{area.areaId},#{owner.userId},#{shopCategory.shopCategoryId})
     </insert>
 
 </mapper>
