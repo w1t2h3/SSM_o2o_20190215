@@ -39,7 +39,20 @@ public class ShopDaoTest extends BaseTest {
         shop.setCreateTime(new Date());
         shop.setAdvice("审核中");
 
-           int effectedNum = shopDao.insertShop(shop);
+        int effectedNum = shopDao.insertShop(shop);
+        assertEquals(1,effectedNum);
+    }
+
+
+    @Test
+    public void testUpdateShop() {
+        Shop shop = new Shop();
+        shop.setShopId(2L);
+        shop.setShopDesc("test");
+        shop.setShopAddr("test");
+        shop.setLastEditTime(new Date());
+
+        int effectedNum = shopDao.updateShop(shop);
         assertEquals(1,effectedNum);
     }
 }
