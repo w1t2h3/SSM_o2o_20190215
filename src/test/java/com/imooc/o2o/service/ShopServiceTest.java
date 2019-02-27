@@ -32,15 +32,15 @@ public class ShopServiceTest extends BaseTest {
         shop.setArea(area);
         shop.setOwner(owner);
         shop.setShopCategory(shopCategory);
-        shop.setShopName("测试的店铺1");
+        shop.setShopName("测试的店铺2");
         shop.setShopDesc("test1");
         shop.setShopAddr("test1");
         shop.setPhone("test1");
         shop.setPriority(1);
         shop.setAdvice("审核中");
 
-        File file = new File("D:/images/产品图片/京都商城的产品/967");
-        ShopExecution shopExecution = shopService.addShop(shop,file);
+        File imageFile = new File("D:/TEST/images.jpg");
+        ShopExecution shopExecution = shopService.addShop(shop,imageFile);
         assertEquals(0,shopExecution.getState());
 
     }

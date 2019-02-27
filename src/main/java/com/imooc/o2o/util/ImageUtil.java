@@ -27,21 +27,21 @@ public class ImageUtil {
 
     /**
      * 处理图片，生成缩略图，并返回缩略图的相对路径
-     * @param file
+     * @param imageFile
      * @param shopImgPath
      * @throws IOException
      */
-    public static String generateThumbnail(File file,String shopImgPath){
+    public static String generateThumbnail(File imageFile,String shopImgPath){
 
         String randomFileName = getRandomFileName();
-        String extension = getExtension(file);
+        String extension = getExtension(imageFile);
         makeDirPath(shopImgPath);
         String relativeAddr = shopImgPath + randomFileName + extension;
         logger.debug("current relativeAddr is: " + relativeAddr);
         String dest = PathUtil.getImgBasePath() + relativeAddr;
         logger.debug("current complete addr is: " + dest);
         try{
-            Thumbnails.of(file).size(200,200)
+            Thumbnails.of(imageFile).size(200,200)
                     .watermark(Positions.BOTTOM_RIGHT,ImageIO.read(new File(basePath + "/watermark.png")),0.8f)
                     .outputQuality(0.8f).toFile(dest);
         }catch (IOException e){
@@ -65,11 +65,11 @@ public class ImageUtil {
 
     /**
      * 获取图片文件的后缀
-     * @param file
+     * @param imageFile
      * @return
      */
-    private static String getExtension(File file) {
-        String originalFileName = file.getName();
+    private static String getExtension(File imageFile) {
+        String originalFileName = imageFile.getName();
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
         return extension;
     }
@@ -101,8 +101,8 @@ public class ImageUtil {
 
         Shop shop = new Shop();
         shop.setShopId(2L);
-        File file = new File("D:/TEST/images.jpg");
+        File imageFile = new File("D:/TEST/images.jpg");
         String shopImgPath = PathUtil.getShopImgPath(shop.getShopId());
-        generateThumbnail(file, shopImgPath);
+        generateThumbnail(imageFile, shopImgPath);
     }
 }
