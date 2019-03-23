@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ShopExecution {
     private int state;
-    private String stutusInfo;
+    private String stateInfo;
     private Shop shop;
     private List<Shop> shopList;
 
@@ -16,18 +16,18 @@ public class ShopExecution {
 //    店铺操作失败时使用的构造器
     public ShopExecution(ShopStateEnum stateEnum){
         this.state = stateEnum.getState();
-        this.stutusInfo = stateEnum.getStateInfo();
+        this.stateInfo = stateEnum.getStateInfo();
     }
     //    店铺操作成功时使用的构造器
     public ShopExecution(ShopStateEnum stateEnum, Shop shop){
         this.state = stateEnum.getState();
-        this.stutusInfo = stateEnum.getStateInfo();
+        this.stateInfo = stateEnum.getStateInfo();
         this.shop = shop;
     }
     //    店铺操作成功时使用的构造器
     public ShopExecution(ShopStateEnum stateEnum, List<Shop> shopList){
         this.state = stateEnum.getState();
-        this.stutusInfo = stateEnum.getStateInfo();
+        this.stateInfo = stateEnum.getStateInfo();
         this.shopList = shopList;
     }
 
@@ -39,12 +39,12 @@ public class ShopExecution {
         this.state = state;
     }
 
-    public String getStutusInfo() {
-        return stutusInfo;
+    public String getStateInfo() {
+        return stateInfo;
     }
 
-    public void setStutusInfo(String stutusInfo) {
-        this.stutusInfo = stutusInfo;
+    public void setStateInfo(String stateInfo) {
+        this.stateInfo = stateInfo;
     }
 
     public Shop getShop() {

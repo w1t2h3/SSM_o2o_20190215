@@ -28,7 +28,7 @@ public class ShopServiceImpl implements ShopService {
             return new ShopExecution(ShopStateEnum.NULL_SHOP);
         }
         try{
-//            给店铺信息附初始值
+//            给店铺信息赋初始值
             shop.setEnableStatus(ShopStateEnum.CHECK.getState());
             shop.setCreateTime(new Date());
             shop.setLastEditTime(new Date());

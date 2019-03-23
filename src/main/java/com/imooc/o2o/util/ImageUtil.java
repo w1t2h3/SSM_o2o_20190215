@@ -55,7 +55,7 @@ public class ImageUtil {
      * 自定义处理后的图片文件名
      * @return
      */
-    private static String getRandomFileName() {
+    public static String getRandomFileName() {
 //        当天时间(年月日时分秒)
         String nowTimeStr = simpleDateFormat.format(new Date());
 //        随机的五位正整数

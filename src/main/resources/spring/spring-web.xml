@@ -21,7 +21,8 @@
     <mv:default-servlet-handler/>
 
     <!-- 4.定义视图解析器 -->
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-          p:prefix="WEB-INF/html/" p:suffix=".html"/>
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+          p:prefix="/WEB-INF/html/" p:suffix=".html"/>
 
 </beans>
