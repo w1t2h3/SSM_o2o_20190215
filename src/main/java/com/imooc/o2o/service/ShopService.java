@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.InputStream;
 
 public interface ShopService {
-    ShopExecution addShop(Shop shop, File shopImg);
+    ShopExecution addShop(Shop shop, InputStream shopImgInputStream,String fileName);
 }

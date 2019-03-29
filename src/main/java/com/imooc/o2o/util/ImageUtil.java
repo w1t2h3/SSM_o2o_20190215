@@ -11,6 +11,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -27,21 +28,21 @@ public class ImageUtil {
 
     /**
      * 处理图片，生成缩略图，并返回缩略图的相对路径
-     * @param imageFile
+     * @param imageFileInputStream
      * @param shopImgPath
      * @throws IOException
      */
-    public static String generateThumbnail(File imageFile,String shopImgPath){
+    public static String generateThumbnail(InputStream imageFileInputStream, String fileName,String shopImgPath){
 
         String randomFileName = getRandomFileName();
-        String extension = getExtension(imageFile);
+        String extension = getExtension(fileName);
         makeDirPath(shopImgPath);
         String relativeAddr = shopImgPath + randomFileName + extension;
         logger.debug("current relativeAddr is: " + relativeAddr);
         String dest = PathUtil.getImgBasePath() + relativeAddr;
         logger.debug("current complete addr is: " + dest);
         try{
-            Thumbnails.of(imageFile).size(200,200)
+            Thumbnails.of(imageFileInputStream).size(200,200)
                     .watermark(Positions.BOTTOM_RIGHT,ImageIO.read(new File(basePath + "/watermark.png")),0.8f)
                     .outputQuality(0.8f).toFile(dest);
         }catch (IOException e){
@@ -65,12 +66,11 @@ public class ImageUtil {
 
     /**
      * 获取图片文件的后缀
-     * @param imageFile
+     * @param fileName
      * @return
      */
-    private static String getExtension(File imageFile) {
-        String originalFileName = imageFile.getName();
-        String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+    private static String getExtension(String fileName) {
+        String extension = fileName.substring(fileName.lastIndexOf("."));
         return extension;
     }
 
@@ -87,22 +87,4 @@ public class ImageUtil {
         }
     }
 
-
-    /**
-     * 测试图片处理的方法
-     * @param args
-     * @throws IOException
-     */
-    public static void main(String[] args) throws IOException {
-
-//        Thumbnails.of(new File("D:/test_img/sun.jpg")).size(200,200)
-//                .watermark(Positions.BOTTOM_RIGHT, ImageIO.read(new File(basePath + "/watermark.png")),0.8f)
-//                .outputQuality(0.8f).toFile("/test_img/sunnew.jpg");
-
-        Shop shop = new Shop();
-        shop.setShopId(2L);
-        File imageFile = new File("D:/TEST/images.jpg");
-        String shopImgPath = PathUtil.getShopImgPath(shop.getShopId());
-        generateThumbnail(imageFile, shopImgPath);
-    }
 }

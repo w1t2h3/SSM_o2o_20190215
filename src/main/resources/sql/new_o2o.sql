@@ -1,3 +1,17 @@
+/*
+Navicat MySQL Data Transfer
+
+Source Server         : ssm
+Source Server Version : 50641
+Source Host           : 127.0.0.1:3306
+Source Database       : new_o2o
+
+Target Server Type    : MYSQL
+Target Server Version : 50641
+File Encoding         : 65001
+
+Date: 2019-03-25 21:23:10
+*/
 
 SET FOREIGN_KEY_CHECKS=0;
 
@@ -77,11 +91,12 @@ CREATE TABLE `tb_person_info` (
   `create_time` datetime DEFAULT NULL,
   `last_edit_time` datetime DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_person_info
 -- ----------------------------
+INSERT INTO `tb_person_info` VALUES ('1', '测试', 'test', 'test', '1', '1', '2', null, null);
 
 -- ----------------------------
 -- Table structure for tb_product
@@ -176,11 +191,13 @@ CREATE TABLE `tb_shop` (
   CONSTRAINT `fk_shop_area` FOREIGN KEY (`area_id`) REFERENCES `tb_area` (`area_id`),
   CONSTRAINT `fk_shop_profile` FOREIGN KEY (`owner_id`) REFERENCES `tb_person_info` (`user_id`),
   CONSTRAINT `fk_shop_shopcate` FOREIGN KEY (`shop_category_id`) REFERENCES `tb_shop_category` (`shop_category_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_shop
 -- ----------------------------
+INSERT INTO `tb_shop` VALUES ('1', '测试的店铺', '测试描述', 'test', '测试地址', 'test', '1', '1', '审核中', '2019-02-22 23:08:50', '2019-02-26 22:17:46', '2', '1', '1');
+INSERT INTO `tb_shop` VALUES ('2', '测试的店铺2', 'test1', '\\upload\\item\\shop\\2\\2019022800150655226.jpg', 'test1', 'test1', '1', '0', '审核中', '2019-02-28 00:15:06', '2019-02-28 00:15:06', '2', '1', '1');
 
 -- ----------------------------
 -- Table structure for tb_shop_category
@@ -198,11 +215,14 @@ CREATE TABLE `tb_shop_category` (
   PRIMARY KEY (`shop_category_id`),
   KEY `fk_shop_category_self` (`parent_id`),
   CONSTRAINT `fk_shop_category_self` FOREIGN KEY (`parent_id`) REFERENCES `tb_shop_category` (`shop_category_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_shop_category
 -- ----------------------------
+INSERT INTO `tb_shop_category` VALUES ('1', '咖啡奶茶', '咖啡奶茶', 'test', '1', null, null, null);
+INSERT INTO `tb_shop_category` VALUES ('2', '奶茶', '测试奶茶', 'test2', '2', null, null, '3');
+INSERT INTO `tb_shop_category` VALUES ('3', '咖啡', '测试类别', 'test3', '0', null, null, '1');
 
 -- ----------------------------
 -- Table structure for tb_wechat_auth

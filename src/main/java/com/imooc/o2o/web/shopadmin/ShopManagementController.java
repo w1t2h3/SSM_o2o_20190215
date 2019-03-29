@@ -3,8 +3,13 @@ package com.imooc.o2o.web.shopadmin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imooc.o2o.Enum.ShopStateEnum;
 import com.imooc.o2o.dto.ShopExecution;
+import com.imooc.o2o.entity.Area;
 import com.imooc.o2o.entity.PersonInfo;
 import com.imooc.o2o.entity.Shop;
+import com.imooc.o2o.entity.ShopCategory;
+import com.imooc.o2o.exceptions.ShopOperationException;
+import com.imooc.o2o.service.AreaService;
+import com.imooc.o2o.service.ShopCategoryService;
 import com.imooc.o2o.service.ShopService;
 import com.imooc.o2o.util.HttpServletRequestUtil;
 import com.imooc.o2o.util.ImageUtil;
@@ -20,7 +25,9 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 @Controller
 @RequestMapping("/shopadmin")
@@ -28,6 +35,29 @@ public class ShopManagementController {
 
     @Autowired
     private ShopService shopService;
+    @Autowired
+    private ShopCategoryService shopCategoryService;
+    @Autowired
+    private AreaService areaService;
+
+    @RequestMapping(value = "/getshopinitinfo",method = RequestMethod.GET)
+    @ResponseBody
+    private Map<String,Object> getShopInitInfo(){
+        Map<String,Object> model = new HashMap<>();
+        List<ShopCategory> shopCategoryList = new ArrayList<>();
+        List<Area> areaList = new ArrayList<>();
+        try{
+            shopCategoryList = shopCategoryService.getShopCategoryList(new ShopCategory());
+            areaList = areaService.getAreaList();
+            model.put("shopCategoryList",shopCategoryList);
+            model.put("areaList",areaList);
+            model.put("success",true);
+        }catch (Exception e){
+            model.put("success",false);
+            model.put("errMsg",e.getMessage());
+        }
+        return model;
+    }
 
     @RequestMapping(value = "/registershop",method = RequestMethod.POST)
 //    下面的@ResponseBody作用：将返回结果（map类型的键值对）转化为json格式
@@ -63,21 +93,30 @@ public class ShopManagementController {
             PersonInfo owner = new PersonInfo();
             owner.setUserId(1L);
             shop.setOwner(owner);
-            File shopImgFile = new File(PathUtil.getImgBasePath() + ImageUtil.getRandomFileName());
+//            File shopImgFile = new File(PathUtil.getImgBasePath() + ImageUtil.getRandomFileName());
+//            try {
+//                shopImgFile.createNewFile();
+//                inputStreamToFile(shopImg.getInputStream(),shopImgFile);
+//            } catch (IOException e) {
+//                modelMap.put("success",false);
+//                modelMap.put("errMsg",e.getMessage());
+//                return modelMap;
+//            }
+            ShopExecution se = null;
             try {
-                shopImgFile.createNewFile();
-                inputStreamToFile(shopImg.getInputStream(),shopImgFile);
+                se = shopService.addShop(shop,shopImg.getInputStream(),shopImg.getOriginalFilename());
+                if (se.getState() == ShopStateEnum.CHECK.getState()) {
+                    modelMap.put("success",true);
+                }else {
+                    modelMap.put("success",false);
+                    modelMap.put("errMsg",se.getStateInfo());
+                }
+            } catch (ShopOperationException e){
+                modelMap.put("success",false);
+                modelMap.put("errMsg",e.getMessage());
             } catch (IOException e) {
                 modelMap.put("success",false);
                 modelMap.put("errMsg",e.getMessage());
-                return modelMap;
-            }
-            ShopExecution se = shopService.addShop(shop,shopImgFile);
-            if (se.getState() == ShopStateEnum.CHECK.getState()) {
-                modelMap.put("success",true);
-            }else {
-                modelMap.put("success",false);
-                modelMap.put("errMsg",se.getStateInfo());
             }
             return modelMap;
         }else {
@@ -87,29 +126,29 @@ public class ShopManagementController {
         }
     }
 
-    private static void inputStreamToFile(InputStream ins, File file){
-        FileOutputStream os = null;
-        try {
-            os = new FileOutputStream(file);
-            int bytesRead = 0;
-            byte[] buffer = new byte[1024];
-            while ((bytesRead = ins.read(buffer)) != -1) {
-                os.write(buffer,0,bytesRead);
-            }
-        }catch (Exception e){
-            throw new RuntimeException("调用inputStreamToFile产生异常：" + e.getMessage());
-        }finally {
-            try{
-                if (os != null) {
-                    os.close();
-                }
-                if (ins != null) {
-                    ins.close();
-                }
-            }catch (IOException e){
-                throw new RuntimeException("inputStreamToFile关闭IO产生异常：" + e.getMessage());
-            }
-        }
-    }
+//    private static void inputStreamToFile(InputStream ins, File file){
+//        FileOutputStream os = null;
+//        try {
+//            os = new FileOutputStream(file);
+//            int bytesRead = 0;
+//            byte[] buffer = new byte[1024];
+//            while ((bytesRead = ins.read(buffer)) != -1) {
+//                os.write(buffer,0,bytesRead);
+//            }
+//        }catch (Exception e){
+//            throw new RuntimeException("调用inputStreamToFile产生异常：" + e.getMessage());
+//        }finally {
+//            try{
+//                if (os != null) {
+//                    os.close();
+//                }
+//                if (ins != null) {
+//                    ins.close();
+//                }
+//            }catch (IOException e){
+//                throw new RuntimeException("inputStreamToFile关闭IO产生异常：" + e.getMessage());
+//            }
+//        }
+//    }
 
 }

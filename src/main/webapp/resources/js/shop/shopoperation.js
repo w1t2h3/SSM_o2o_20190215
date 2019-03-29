@@ -1,7 +1,8 @@
 $(function(){
     var initUrl = '/o2o/shopadmin/getshopinitinfo';
     var registerShopUrl = '/o2o/shopadmin/registershop';
-    alert(initUrl);
+    //下面弹出语句，是用来测试html已经成功加载了js文件
+    // alert(initUrl);
     getShopInitInfo();
     function getShopInitInfo() {
         $.getJSON(initUrl,function (data) {
