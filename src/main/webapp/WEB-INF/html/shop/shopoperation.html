@@ -102,7 +102,19 @@
                     </div>
                 </li>
                 <!-- 验证码 kaptcha -->
-
+                <li>
+                    <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-name"></i></div>
+                        <div class="item-inner">
+                            <div class="item-title label">验证码</div>
+                            <input type="text" id="j_captcha" placeholder="验证码">
+                            <div class="item-input">
+                                <img id="captcha_img" alt="点击更换" title="点击更换" src="../Kaptcha"
+                                    onclick="changeVerifyCode(this)"/>
+                            </div>
+                        </div>
+                    </div>
+                </li>
             </ul>
         </div>
         <div class="content-block">
@@ -116,7 +128,11 @@
     <script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
     <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
     <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+
+    <!-- 使用Web工程相对路径引入js文件 其中../ 相当于绝对路径 /o2o/ -->
     <script type='text/javascript' src='../resources/js/shop/shopoperation.js' charset='utf-8'></script>
+    <script type='text/javascript' src='../resources/js/common/common.js' charset='utf-8'></script>
+
 
 </body>
 </html>

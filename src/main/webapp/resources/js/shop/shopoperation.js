@@ -40,12 +40,14 @@ $(function(){
             var formData = new FormData();
             formData.append('shopImg',shopImg);
             formData.append('shopStr',JSON.stringify(shop));
+            var verifyCodeActual = $('#j_captcha').val();
+            formData.append('verifyCodeActual',verifyCodeActual);
             $.ajax({
                 url:registerShopUrl,
                 type:'POST',
                 data:formData,
                 contentType:false,
-                proceesData:false,
+                processData:false,
                 cache:false,
                 success:function (data) {
                     if (data.success) {
@@ -53,6 +55,8 @@ $(function(){
                     }else {
                         $.toast('提交失败！' + data.errMsg);
                     }
+                    //上传数据到后台是否成功，都会更新验证码
+                    $('#captcha_img').click();
                 }
             });
         });
