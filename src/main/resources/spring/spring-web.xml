@@ -25,7 +25,7 @@
           class="org.springframework.web.servlet.view.InternalResourceViewResolver"
           p:prefix="/WEB-INF/html/" p:suffix=".html"/>
 
-    <!-- 文件上传解析器 -->
+    <!-- 5.文件上传解析器 -->
     <!--作用: 在利用ajax将前端表单提交的数据上传到后台后，能被后台识别-->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="defaultEncoding" value="utf-8"/>

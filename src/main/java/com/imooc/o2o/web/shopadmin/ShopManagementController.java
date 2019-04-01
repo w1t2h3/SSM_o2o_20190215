@@ -111,7 +111,11 @@ public class ShopManagementController {
 //            }
             ShopExecution se = null;
             try {
-                se = shopService.addShop(shop,shopImg.getInputStream(),shopImg.getOriginalFilename());
+                try{
+                    se = shopService.addShop(shop,shopImg.getInputStream(),shopImg.getOriginalFilename());
+                }catch (ShopOperationException e){
+                    e.printStackTrace();
+                }
                 if (se.getState() == ShopStateEnum.CHECK.getState()) {
                     modelMap.put("success",true);
                 }else {
