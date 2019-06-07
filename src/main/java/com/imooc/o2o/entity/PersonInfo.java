@@ -15,6 +15,12 @@ public class PersonInfo {
     private String profileImg;
 //    用户状态：可用或者禁用
     private Integer enableStatus;
+//    用户类型:1.顾客 2.店家 3.超级管理员
+    private Integer userType;
+//    创建时间
+    private Date createTime;
+//    更新时间
+    private Date lastEditTime;
 
     public Long getUserId() {
         return userId;
@@ -88,10 +94,5 @@ public class PersonInfo {
         this.lastEditTime = lastEditTime;
     }
 
-    //    用户类型:1.顾客 2.店家 3.超级管理员
-    private Integer userType;
-//    创建时间
-    private Date createTime;
-//    更新时间
-    private Date lastEditTime;
+
 }

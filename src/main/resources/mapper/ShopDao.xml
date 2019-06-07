@@ -3,6 +3,36 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.imooc.o2o.dao.ShopDao">
+
+    <resultMap id="queryShopMap" type="com.imooc.o2o.entity.Shop">
+        <id column="shop_id" property="shopId"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="shop_desc" property="shopDesc"/>
+        <result column="shop_img" property="shopImg"/>
+        <result column="shop_addr" property="shopAddr"/>
+        <result column="phone" property="phone"/>
+        <result column="priority" property="priority"/>
+        <result column="enable_status" property="enableStatus"/>
+        <result column="advice" property="advice"/>
+        <result column="create_time" property="createTime"/>
+        <result column="last_edit_time" property="lastEditTime"/>
+        
+        <association property="area" javaType="com.imooc.o2o.entity.Area">
+            <id column="area_id" property="areaId"/>
+            <result column="area_name" property="areaName"/>
+        </association>
+        
+        <association property="owner" javaType="com.imooc.o2o.entity.PersonInfo">
+            <id column="user_id" property="userId"/>
+            <result column="name" property="username"/>
+        </association>
+
+        <association property="shopCategory" javaType="com.imooc.o2o.entity.ShopCategory">
+            <id column="shop_category_id" property="shopCategoryId"/>
+            <result column="shop_category_name" property="shopCategoryName"/>
+        </association>
+    </resultMap>
+
     <insert id="insertShop" useGeneratedKeys="true" keyColumn="shop_id" keyProperty="shopId">
         insert into tb_shop(shop_name,shop_desc,shop_img,shop_addr,phone,
         priority,enable_status,advice,create_time,last_edit_time,area_id,owner_id,shop_category_id)
@@ -27,4 +57,28 @@
         </set>
         where shop_id = #{shopId}
     </update>
+    
+    <select id="queryByShopId" parameterType="long" resultMap="queryShopMap">
+        select
+        shop_id,
+        shop_name,
+        shop_desc,
+        shop_img,
+        shop_addr,
+        phone,
+        area.area_id,
+        area.area_name,
+        sc.shop_category_id,
+        sc.shop_category_name
+        from
+        tb_shop shop,
+        tb_area area,
+        tb_shop_category sc
+        where
+        shop.area_id = area.area_id
+        and
+        shop.shop_category_id = sc.shop_category_id
+        and
+        shop.shop_id = #{shopId}
+    </select>
 </mapper>
