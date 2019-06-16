@@ -13,8 +13,6 @@ import com.imooc.o2o.service.ShopCategoryService;
 import com.imooc.o2o.service.ShopService;
 import com.imooc.o2o.util.CodeUtil;
 import com.imooc.o2o.util.HttpServletRequestUtil;
-import com.imooc.o2o.util.ImageUtil;
-import com.imooc.o2o.util.PathUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +23,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +40,7 @@ public class ShopManagementController {
     private AreaService areaService;
 
     @RequestMapping(value = "/getshopinitinfo",method = RequestMethod.GET)
+    //    下面的@ResponseBody作用：将返回结果（map类型的键值对）转化为json格式
     @ResponseBody
     private Map<String,Object> getShopInitInfo(){
         Map<String,Object> model = new HashMap<>();

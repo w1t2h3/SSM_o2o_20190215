@@ -1,10 +1,10 @@
 package com.imooc.o2o.service.impl;
 
 import com.imooc.o2o.Enum.ShopStateEnum;
-import com.imooc.o2o.exceptions.ShopOperationException;
 import com.imooc.o2o.dao.ShopDao;
 import com.imooc.o2o.dto.ShopExecution;
 import com.imooc.o2o.entity.Shop;
+import com.imooc.o2o.exceptions.ShopOperationException;
 import com.imooc.o2o.service.ShopService;
 import com.imooc.o2o.util.ImageUtil;
 import com.imooc.o2o.util.PathUtil;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.io.InputStream;
 import java.util.Date;
 @Service
@@ -69,6 +68,33 @@ public class ShopServiceImpl implements ShopService {
         String shopImgAddr = ImageUtil.generateThumbnail(imageFileInputStream,fileName,shopImgPath);
         shop.setShopImg(shopImgAddr);
 
+    }
+
+    public Shop queryByShopId(long shopId){
+        return shopDao.queryByShopId(shopId);
+    }
+
+    public ShopExecution modifyShop(Shop shop,InputStream shopImgInputStream,String fileName)
+    throws ShopOperationException{
+        if (shop == null || shop.getShopId() == null){
+            return new ShopExecution(ShopStateEnum.NULL_SHOP);
+        }else {
+            try {
+                //1. 判断是否需要处理图片
+                if (shopImgInputStream != null && fileName != null && !"".equals(fileName)) {
+                    Shop tempShop = shopDao.queryByShopId(shop.getShopId());
+                    if (tempShop.getShopImg() != null) {
+                        PathUtil.deleteFileOrPath(tempShop.getShopImg());
+                    }
+                    addShopImg(shop, shopImgInputStream, fileName);
+                }}catch (Exception e){
+                throw new ShopOperationException("图片更新失败：" + e.getMessage());
+            }
+                //2.更新店铺信息
+                shop.setLastEditTime(new Date());
+                shopDao.updateShop(shop);
+                return new ShopExecution(ShopStateEnum.SUCCESS);
+        }
     }
 
 }
